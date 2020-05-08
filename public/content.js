@@ -6,7 +6,8 @@ const SIDEPANEL_WIDTH = '400px';
 const sidepanel = document.createElement('div');
 sidepanel.style.background = 'white';
 sidepanel.style.height = '100%';
-sidepanel.style.width = '0px';
+sidepanel.style.display = 'none';
+sidepanel.style.width = SIDEPANEL_WIDTH;
 sidepanel.style.position = 'fixed';
 sidepanel.style.top = '0px';
 sidepanel.style.right = '0px';
@@ -17,7 +18,7 @@ document.body.appendChild(sidepanel);
 // Open the sidepanel if it has been previously opened
 chrome.storage.sync.get(['open'], (value) => {
   if (value.open) {
-    sidepanel.style.width = SIDEPANEL_WIDTH;
+    sidepanel.style.display = 'block';
   }
 });
 
@@ -25,11 +26,11 @@ chrome.storage.sync.get(['open'], (value) => {
  * Toggle the side panel to open and set a value in the storage
  */
 function toggle() {
-  if (sidepanel.style.width == '0px') {
-    sidepanel.style.width = SIDEPANEL_WIDTH;
+  if (sidepanel.style.display === 'none') {
+    sidepanel.style.display = 'block';
     chrome.storage.sync.set({ open: true });
   } else {
-    sidepanel.style.width = '0px';
+    sidepanel.style.display = 'none';
     chrome.storage.sync.set({ open: false });
   }
 }
