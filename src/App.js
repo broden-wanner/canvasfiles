@@ -1,22 +1,30 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import MainSection from './CourseList';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CourseList from './CourseList';
+import ExclusionList from './ExclusionList';
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#f5f5f5',
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
+  },
+  main: {
+    padding: theme.spacing(2),
   },
 }));
 
@@ -45,8 +53,34 @@ function App() {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <CourseList />
-      <ExclusionList />
+
+      <div className={classes.main}>
+        <ExpansionPanel defaultExpanded={true}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Course List</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <CourseList />
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+
+        <ExpansionPanel>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>File Types to Exlcude</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <ExclusionList />
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </div>
     </div>
   );
 }

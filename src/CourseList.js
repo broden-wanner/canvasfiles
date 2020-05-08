@@ -46,11 +46,8 @@ export default function CourseList() {
 
   return (
     <React.Fragment>
-      <Typography variant="h6" component="h6" className={classes.title}>
-        Course List
-      </Typography>
       <List dense component="div" role="list">
-        {courses.map((c) => {
+        {courses.map((c, i) => {
           return (
             <React.Fragment>
               <ListItem key={c.id} role="listitem" button onClick={() => handleToggle(c.id)}>
@@ -63,7 +60,7 @@ export default function CourseList() {
                 </ListItemIcon>
                 <ListItemText id={c.id} primary={c.name} />
               </ListItem>
-              <Divider />
+              {i !== courses.length - 1 && <Divider />}
             </React.Fragment>
           );
         })}
