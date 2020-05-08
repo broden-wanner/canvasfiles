@@ -1,5 +1,7 @@
 'use strict';
 
+const SIDEPANEL_WIDTH = '400px';
+
 // Create the sidepanel
 const sidepanel = document.createElement('div');
 sidepanel.style.background = 'white';
@@ -15,7 +17,7 @@ document.body.appendChild(sidepanel);
 // Open the sidepanel if it has been previously opened
 chrome.storage.sync.get(['open'], (value) => {
   if (value.open) {
-    sidepanel.style.width = '400px';
+    sidepanel.style.width = SIDEPANEL_WIDTH;
   }
 });
 
@@ -24,7 +26,7 @@ chrome.storage.sync.get(['open'], (value) => {
  */
 function toggle() {
   if (sidepanel.style.width == '0px') {
-    sidepanel.style.width = '400px';
+    sidepanel.style.width = SIDEPANEL_WIDTH;
     chrome.storage.sync.set({ open: true });
   } else {
     sidepanel.style.width = '0px';
