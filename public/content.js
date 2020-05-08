@@ -12,11 +12,23 @@ sidepanel.style.zIndex = '9000000000000000000';
 sidepanel.setAttribute('id', 'root');
 document.body.appendChild(sidepanel);
 
+// Open the sidepanel if it has been previously opened
+chrome.storage.sync.get(['open'], (value) => {
+  if (value.open) {
+    sidepanel.style.width = '400px';
+  }
+});
+
+/**
+ * Toggle the side panel to open and set a value in the storage
+ */
 function toggle() {
   if (sidepanel.style.width == '0px') {
     sidepanel.style.width = '400px';
+    chrome.storage.sync.set({ open: true });
   } else {
     sidepanel.style.width = '0px';
+    chrome.storage.sync.set({ open: false });
   }
 }
 
