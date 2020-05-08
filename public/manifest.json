@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "manifest_version": 2,
 
-  "permissions": ["declarativeContent"],
+  "permissions": ["declarativeContent", "activeTab"],
 
   "background": {
     "scripts": ["background.js"]
@@ -19,7 +19,5 @@
     }
   ],
 
-  "browser_action": {
-    "default_title": "Weather Widget"
-  }
+  "browser_action": {}
 }
