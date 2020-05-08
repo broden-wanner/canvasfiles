@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import MainSection from './MainSection';
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <MainSection />
     </div>
   );
 }
