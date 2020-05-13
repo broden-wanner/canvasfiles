@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getClasses } from './requests';
+import { getClasses, getFiles } from './requests';
 import {
   List,
   ListItem,
@@ -29,7 +29,7 @@ export default function CourseList() {
 
   useEffect(() => {
     getCourseList();
-  }, [courses]);
+  }, []);
 
   const handleToggle = (id) => {
     const currentIndex = checked.indexOf(id);
