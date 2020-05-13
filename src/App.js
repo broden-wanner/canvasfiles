@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CourseList from './CourseList';
 import ExclusionList from './ExclusionList';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
+import { getClasses, getCourseFiles } from './requests';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [courses, setCourses] = useState([]);
+  const [files, setFiles] = useState({});
   const classes = useStyles();
+
+  const retrieveCourseList = async (callback) => {
+    const courseList = await getClasses();
+    setCourses(courseList);
+    callback(courseList);
+  };
+
+  const retrieveCourseFiles = async (courses) => {
+    const idsToFiles = {};
+    for (const course of courses) {
+      getCourseFiles(course.id).then((fileList) => {
+        idsToFiles[String(course.id)] = fileList;
+        setFiles({ ...idsToFiles });
+      });
+    }
+  };
+
+  useEffect(() => {
+    retrieveCourseList(retrieveCourseFiles);
+  }, []);
 
   const onClose = () => {
     // Use the global togglePanel function to close it
@@ -65,7 +88,7 @@ function App() {
             <Typography className={classes.heading}>Course List</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <CourseList />
+            <CourseList courses={courses} files={files} />
           </ExpansionPanelDetails>
         </ExpansionPanel>
 
