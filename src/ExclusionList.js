@@ -9,6 +9,7 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -19,46 +20,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ExclusionList() {
+function ExclusionList({ extensions, excludedExtensions, handleExcludeExtension }) {
   const classes = useStyles();
-  const excludeList = ['*.docx', '*.pdf', '*.mp4', '*.mp3', '*.pptx'];
-  const [checked, setChecked] = useState([]);
-
-  const handleToggle = (ext) => {
-    const currentIndex = checked.indexOf(ext);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(ext);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
 
   return (
     <React.Fragment>
       <List dense component="div" role="list" className={classes.list}>
-        {excludeList.map((ext, i) => {
-          return (
-            <React.Fragment>
-              <ListItem key={i} role="listitem" button onClick={() => handleToggle(ext)}>
-                <ListItemIcon>
-                  <Checkbox
-                    checked={checked.includes(ext)}
-                    tabIndex={-1}
-                    inputProps={{ 'aria-labelledby': ext }}
-                  />
-                </ListItemIcon>
-                <ListItemText id={ext} primary={ext} />
-              </ListItem>
-              {i !== excludeList.length - 1 && <Divider />}
-            </React.Fragment>
-          );
-        })}
+        {extensions &&
+          extensions.map((ext, i) => {
+            return (
+              <React.Fragment>
+                <ListItem
+                  key={i}
+                  role="listitem"
+                  button
+                  onClick={() => handleExcludeExtension(ext)}
+                >
+                  <ListItemIcon>
+                    <Checkbox
+                      checked={excludedExtensions.includes(ext)}
+                      tabIndex={-1}
+                      inputProps={{ 'aria-labelledby': ext }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText id={ext} primary={ext} />
+                </ListItem>
+                {i !== extensions.length - 1 && <Divider />}
+              </React.Fragment>
+            );
+          })}
         <ListItem />
       </List>
     </React.Fragment>
   );
 }
+
+ExclusionList.propTypes = {
+  extensions: PropTypes.array.isRequired,
+  excludedExtensions: PropTypes.array.isRequired,
+  handleExcludeExtension: PropTypes.func.isRequired,
+};
+
+export default ExclusionList;

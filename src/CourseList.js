@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   List,
   ListItem,
@@ -16,26 +16,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CourseList({ courses, files }) {
-  const [checked, setChecked] = useState([]);
+function CourseList({ courses, files, excludedCourses, handleExcludeCourse }) {
   const classes = useStyles();
 
-  const handleToggle = (id) => {
-    const currentIndex = checked.indexOf(id);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(id);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
   const numFiles = (id) => {
-    if (files && id && files[String(id)] && files[String(id)].length > 0) {
-      return `${files[String(id)].length} files`;
+    if (files && id && files[id] && files[id].length > 0) {
+      return `${files[id].length} files`;
     }
     return 'No files';
   };
@@ -47,10 +33,15 @@ function CourseList({ courses, files }) {
           courses.map((c, i) => {
             return (
               <React.Fragment>
-                <ListItem key={c.id} role="listitem" button onClick={() => handleToggle(c.id)}>
+                <ListItem
+                  key={c.id}
+                  role="listitem"
+                  button
+                  onClick={() => handleExcludeCourse(c.id)}
+                >
                   <ListItemIcon>
                     <Checkbox
-                      checked={checked.includes(c.id)}
+                      checked={excludedCourses.includes(c.id)}
                       tabIndex={-1}
                       inputProps={{ 'aria-labelledby': c.id }}
                     />
@@ -68,8 +59,10 @@ function CourseList({ courses, files }) {
 }
 
 CourseList.propTypes = {
-  courses: PropTypes.array,
-  files: PropTypes.object,
+  courses: PropTypes.array.isRequired,
+  files: PropTypes.object.isRequired,
+  excludedCourses: PropTypes.array.isRequired,
+  handleExcludeCourse: PropTypes.func.isRequired,
 };
 
 export default CourseList;
