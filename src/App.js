@@ -32,7 +32,8 @@ function App() {
   const classes = useStyles();
 
   const onClose = () => {
-    console.log('close');
+    // Use the global togglePanel function to close it
+    togglePanel(); // eslint-disable-line
   };
 
   return (

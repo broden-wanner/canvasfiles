@@ -25,7 +25,7 @@ chrome.storage.sync.get(['open'], (value) => {
 /**
  * Toggle the side panel to open and set a value in the storage
  */
-function toggle() {
+function togglePanel() {
   if (sidepanel.style.display === 'none') {
     sidepanel.style.display = 'block';
     chrome.storage.sync.set({ open: true });
@@ -38,6 +38,6 @@ function toggle() {
 // Add toggle listener
 chrome.runtime.onMessage.addListener(({ message }, sender) => {
   if (message === 'toggle') {
-    toggle();
+    togglePanel();
   }
 });
