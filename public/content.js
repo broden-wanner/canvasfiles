@@ -12,6 +12,7 @@ sidepanel.style.position = 'fixed';
 sidepanel.style.top = '0px';
 sidepanel.style.right = '0px';
 sidepanel.style.zIndex = '9000000000000000000';
+// sidepanel.style.overflowY = 'auto';
 sidepanel.setAttribute('id', 'root');
 document.body.appendChild(sidepanel);
 
