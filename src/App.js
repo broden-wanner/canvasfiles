@@ -57,7 +57,7 @@ function App() {
     retrieveCourseList(retrieveCourseFiles);
   }, []);
 
-  const extensions = ['*.docx', '*.pdf', '*.mp4', '*.mp3', '*.pptx'];
+  const extensions = ['docx', 'pdf', 'mp4', 'mp3', 'pptx', 'png', 'jpg', 'jpeg'];
 
   /**
    * Handles excluding a course from downloads
@@ -93,8 +93,10 @@ function App() {
     setExcludedExtensions(newExcluded);
   };
 
+  /**
+   * Use the global togglePanel function defined in content.js to close it
+   */
   const onClose = () => {
-    // Use the global togglePanel function defined in content.js to close it
     togglePanel(); // eslint-disable-line
   };
 
@@ -118,6 +120,13 @@ function App() {
       </AppBar>
 
       <div className={classes.main}>
+        <Stats
+          courses={courses}
+          files={files}
+          excludedCourses={excludedCourses}
+          excludedExtensions={excludedExtensions}
+        />
+
         <ExpansionPanel defaultExpanded={true}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -152,13 +161,6 @@ function App() {
             />
           </ExpansionPanelDetails>
         </ExpansionPanel>
-
-        <Stats
-          courses={courses}
-          files={files}
-          excludedCourses={excludedCourses}
-          excludedExtensions={excludedExtensions}
-        />
       </div>
     </div>
   );
