@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Adds the js and css files from the build/static folder to the manifest.json
+ */
+
 const fs = require('fs');
 
 const MANIFEST_DIR = './build/manifest.json';
