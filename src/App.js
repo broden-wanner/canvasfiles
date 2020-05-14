@@ -163,6 +163,17 @@ function App() {
             />
           </ExpansionPanelDetails>
         </ExpansionPanel>
+
+        <ExpansionPanel defaultExpanded={false}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Files to Download</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails></ExpansionPanelDetails>
+        </ExpansionPanel>
       </div>
     </div>
   );
