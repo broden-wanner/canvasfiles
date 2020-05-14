@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Stats({ courses, files, excludedCourses, excludedExtensions }) {
-  const [downloadList, setDownloadList] = useState([]);
-
-  /**
-   * To be used in useEffect, it updates the list of files to download
-   */
-  const updateDownloadList = () => {
-    let dl = [];
-    for (const id in files) {
-      if (!excludedCourses.includes(+id)) {
-        dl = [...dl, ...files[+id]];
-      }
-    }
-    setDownloadList(dl);
-  };
-
+export default function Stats({
+  courses,
+  files,
+  excludedCourses,
+  excludedExtensions,
+  filesToDownload,
+}) {
   /**
    * Finds the name of the course with id number `cid`
    * @param {number} cid - course id number
@@ -30,14 +21,10 @@ export default function Stats({ courses, files, excludedCourses, excludedExtensi
     return '';
   };
 
-  useEffect(() => {
-    updateDownloadList();
-  }, [courses, files, excludedCourses, excludedExtensions]);
-
   return (
     <div>
       <div>
-        <p>Total files to download: {downloadList.length}</p>
+        <p>Total files to download: {filesToDownload.length}</p>
         <p>
           Courses to exlude:{' '}
           {excludedCourses.length === 0 ? 'None' : excludedCourses.map(nameOf).join(', ')}

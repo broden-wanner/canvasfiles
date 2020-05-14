@@ -11,6 +11,7 @@ import ExclusionList from './ExclusionList';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 import { getClasses, getCourseFiles } from './requests';
 import Stats from './Stats';
+import AllFiles from './AllFiles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,14 +38,23 @@ function App() {
   const [files, setFiles] = useState({});
   const [excludedExtensions, setExcludedExtensions] = useState([]);
   const [excludedCourses, setExcludedCourses] = useState([]);
+  const [filesToDownload, setFilesToDownload] = useState([]);
   const classes = useStyles();
 
+  /**
+   * Gets the list of all active courses
+   * @param {function} callback - function to run after the course list is retrieved
+   */
   const retrieveCourseList = async (callback) => {
     const courseList = await getClasses();
     setCourses(courseList);
     callback(courseList);
   };
 
+  /**
+   * Gets the files for an array of courses
+   * @param {Array[Course]} courses - the list of courses for which to get the course files
+   */
   const retrieveCourseFiles = async (courses) => {
     const idsToFiles = {};
     for (const course of courses) {
@@ -55,9 +65,18 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    retrieveCourseList(retrieveCourseFiles);
-  }, []);
+  /**
+   * To be used in useEffect, it updates the list of files to download based on what is excluded
+   */
+  const updateFilesToDownload = () => {
+    let dl = [];
+    for (const id in files) {
+      if (!excludedCourses.includes(+id)) {
+        dl = [...dl, ...files[+id]];
+      }
+    }
+    setFilesToDownload(dl);
+  };
 
   const extensions = ['docx', 'pdf', 'mp4', 'mp3', 'pptx', 'png', 'jpg', 'jpeg'];
 
@@ -102,6 +121,16 @@ function App() {
     togglePanel(); // eslint-disable-line
   };
 
+  // Retrieve the course list and files on initialization
+  useEffect(() => {
+    retrieveCourseList(retrieveCourseFiles);
+  }, []);
+
+  // Update the files to download when the following change
+  useEffect(() => {
+    updateFilesToDownload();
+  }, [courses, files, excludedCourses, excludedExtensions]);
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -127,6 +156,7 @@ function App() {
           files={files}
           excludedCourses={excludedCourses}
           excludedExtensions={excludedExtensions}
+          filesToDownload={filesToDownload}
         />
 
         <ExpansionPanel defaultExpanded={true}>
@@ -172,7 +202,9 @@ function App() {
           >
             <Typography className={classes.heading}>Files to Download</Typography>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails></ExpansionPanelDetails>
+          <ExpansionPanelDetails>
+            <AllFiles courses={courses} filesToDownload={filesToDownload} />
+          </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
     </div>
