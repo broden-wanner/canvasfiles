@@ -21,19 +21,25 @@ export default function Stats({
     return '';
   };
 
+  /**
+   * Computes the size of all the files to download
+   */
+  const sizeOfAllFiles = () => {
+    return `${Math.round(filesToDownload.reduce((size, f) => size + f.size, 0) / 1e6)} MB`;
+  };
+
   return (
     <div>
-      <div>
-        <p>Total files to download: {filesToDownload.length}</p>
-        <p>
-          Courses to exlude:{' '}
-          {excludedCourses.length === 0 ? 'None' : excludedCourses.map(nameOf).join(', ')}
-        </p>
-        <p>
-          Extensions to exclude:{' '}
-          {excludedExtensions.length === 0 ? 'None' : excludedExtensions.join(', ')}
-        </p>
-      </div>
+      <p>Total files to download: {filesToDownload.length}</p>
+      <p>
+        Courses to exlude:{' '}
+        {excludedCourses.length === 0 ? 'None' : excludedCourses.map(nameOf).join(', ')}
+      </p>
+      <p>
+        Extensions to exclude:{' '}
+        {excludedExtensions.length === 0 ? 'None' : excludedExtensions.join(', ')}
+      </p>
+      <p>Size of all files: {sizeOfAllFiles()}</p>
     </div>
   );
 }

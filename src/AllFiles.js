@@ -14,10 +14,6 @@ const useStyles = makeStyles((theme) => ({
 function AllFiles({ courses, filesToDownload }) {
   const classes = useStyles();
 
-  const fileSize = (s) => {
-    return `${s % 1000} MB`;
-  };
-
   return (
     <React.Fragment>
       <List className={classes.list} dense component="div" role="list">
@@ -26,7 +22,7 @@ function AllFiles({ courses, filesToDownload }) {
             return (
               <React.Fragment>
                 <ListItem className={classes.item} key={f.id} role="listitem" button>
-                  <ListItemText id={f.id} primary={`${f.display_name} (${fileSize(f.size)})`} />
+                  <ListItemText id={f.id} primary={`${f.display_name} (${f.displaySize})`} />
                 </ListItem>
                 {i !== filesToDownload.length - 1 && <Divider />}
               </React.Fragment>

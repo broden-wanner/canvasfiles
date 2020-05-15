@@ -42,6 +42,19 @@ function App() {
   const classes = useStyles();
 
   /**
+   * Returns a string for the size of the file
+   * @param {number} s - size of file in bytes
+   */
+  const fileSize = (s) => {
+    const mbs = s / 1e6;
+    if (mbs < 1.0) {
+      return `${Math.round(s / 1e3)} kB`;
+    } else {
+      return `${Math.round(mbs)} MB`;
+    }
+  };
+
+  /**
    * Gets the list of all active courses
    * @param {function} callback - function to run after the course list is retrieved
    */
@@ -59,7 +72,13 @@ function App() {
     const idsToFiles = {};
     for (const course of courses) {
       getCourseFiles(course.id).then((fileList) => {
-        idsToFiles[course.id] = fileList;
+        idsToFiles[course.id] = fileList.map((f) => {
+          // Add the course id to the file
+          f['courseId'] = course.id;
+          // Create the size to display
+          f['displaySize'] = fileSize(f.size);
+          return f;
+        });
         setFiles({ ...idsToFiles });
       });
     }
