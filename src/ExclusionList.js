@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   List,
   ListItem,
@@ -6,7 +6,6 @@ import {
   Checkbox,
   ListItemText,
   Divider,
-  Typography,
   makeStyles,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
