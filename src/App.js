@@ -12,6 +12,7 @@ import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@m
 import { getClasses, getCourseFiles } from './requests';
 import Stats from './Stats';
 import AllFiles from './AllFiles';
+import { testfiles, testcourses } from './testdata';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [courses, setCourses] = useState([]);
-  const [files, setFiles] = useState({});
+  const [courses, setCourses] = useState(testcourses);
+  const [files, setFiles] = useState(testfiles);
   const [excludedExtensions, setExcludedExtensions] = useState([]);
   const [excludedCourses, setExcludedCourses] = useState([]);
   const [filesToDownload, setFilesToDownload] = useState([]);
@@ -159,7 +160,7 @@ function App() {
 
   // Retrieve the course list and files on initialization
   useEffect(() => {
-    retrieveCourseList(retrieveCourseFiles);
+    // retrieveCourseList(retrieveCourseFiles);
   }, []);
 
   // Update the files to download when the following change
