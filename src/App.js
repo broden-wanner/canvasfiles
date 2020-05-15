@@ -85,19 +85,36 @@ function App() {
   };
 
   /**
+   * Checks whether a file has a vlid extension
+   * @param {string} name - filename
+   */
+  const validExtension = (name) => {
+    for (const ext of excludedExtensions) {
+      if (name.endsWith(ext)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  /**
    * To be used in useEffect, it updates the list of files to download based on what is excluded
    */
   const updateFilesToDownload = () => {
     let dl = [];
     for (const id in files) {
       if (!excludedCourses.includes(+id)) {
-        dl = [...dl, ...files[+id]];
+        for (const f of files[+id]) {
+          if (validExtension(f.filename)) {
+            dl.push(f);
+          }
+        }
       }
     }
     setFilesToDownload(dl);
   };
 
-  const extensions = ['docx', 'pdf', 'mp4', 'mp3', 'pptx', 'png', 'jpg', 'jpeg'];
+  const extensions = ['docx', 'pdf', 'mp4', 'mp3', 'm4a', 'wav', 'pptx', 'png', 'jpg', 'jpeg'];
 
   /**
    * Handles excluding a course from downloads
