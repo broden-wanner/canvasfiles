@@ -160,6 +160,7 @@ function App() {
 
   // Retrieve the course list and files on initialization
   useEffect(() => {
+    // TODO: uncomment this after development
     // retrieveCourseList(retrieveCourseFiles);
   }, []);
 
