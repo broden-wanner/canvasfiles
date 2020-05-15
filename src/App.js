@@ -73,8 +73,8 @@ function App() {
     for (const course of courses) {
       getCourseFiles(course.id).then((fileList) => {
         idsToFiles[course.id] = fileList.map((f) => {
-          // Add the course id to the file
-          f['courseId'] = course.id;
+          // Add the course name to the file for display
+          f['courseName'] = course.name;
           // Create the size to display
           f['displaySize'] = fileSize(f.size);
           return f;

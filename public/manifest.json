@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "manifest_version": 2,
 
-  "permissions": ["declarativeContent", "activeTab", "storage"],
+  "permissions": ["declarativeContent", "activeTab", "storage", "downloads"],
 
   "background": {
     "scripts": ["background.js"]

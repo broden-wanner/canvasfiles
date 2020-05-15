@@ -42,3 +42,17 @@ chrome.runtime.onMessage.addListener(({ message }, sender) => {
     togglePanel();
   }
 });
+
+// Open the port for downloading messaging
+const port = chrome.runtime.connect({ name: 'download' });
+port.onMessage.addListener((msg) => {
+  console.log(msg);
+});
+
+/**
+ * Sends a message to the background script to download the files in the list
+ * @param {Array[File]} downloadList - a list of files to be downloaded
+ */
+function downloadFiles(downloadList) {
+  port.postMessage({ downloadList: downloadList });
+}

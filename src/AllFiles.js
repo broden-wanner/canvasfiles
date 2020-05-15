@@ -14,6 +14,14 @@ const useStyles = makeStyles((theme) => ({
 function AllFiles({ courses, filesToDownload }) {
   const classes = useStyles();
 
+  /**
+   * Uses the global downloadFiles function in content.js to download the file
+   * @param {File} f - a file object to download
+   */
+  const startDownload = (f) => {
+    downloadFiles([f]); // eslint-disable-line
+  };
+
   return (
     <React.Fragment>
       <List className={classes.list} dense component="div" role="list">
@@ -21,7 +29,13 @@ function AllFiles({ courses, filesToDownload }) {
           filesToDownload.map((f, i) => {
             return (
               <React.Fragment>
-                <ListItem className={classes.item} key={f.id} role="listitem" button>
+                <ListItem
+                  className={classes.item}
+                  key={f.id}
+                  onClick={() => startDownload(f)}
+                  role="listitem"
+                  button
+                >
                   <ListItemText id={f.id} primary={`${f.display_name} (${f.displaySize})`} />
                 </ListItem>
                 {i !== filesToDownload.length - 1 && <Divider />}
