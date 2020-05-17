@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import CourseList from './CourseList';
-import ExclusionList from './ExclusionList';
+import CourseList from './components/CourseList';
+import ExclusionList from './components/ExclusionList';
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -16,9 +16,9 @@ import {
   Button,
   Container,
 } from '@material-ui/core';
-import { getClasses, getCourseFiles } from './requests';
-import Stats from './Stats';
-import AllFiles from './AllFiles';
+import { getClasses, getCourseFiles } from './services/requests';
+import Stats from './components/Stats';
+import AllFiles from './components/AllFiles';
 import { testfiles, testcourses } from './testdata';
 
 const useStyles = makeStyles((theme) => ({
