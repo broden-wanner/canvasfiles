@@ -185,6 +185,14 @@ function App() {
     togglePanel(); // eslint-disable-line
   };
 
+  /**
+   * Download all files using the global downloadFiles function
+   */
+  const downloadAll = () => {
+    // eslint-disable-next-line
+    downloadFiles(filesToDownload);
+  };
+
   // Retrieve the course list and files on initialization
   useEffect(() => {
     // TODO: uncomment this after development
@@ -288,7 +296,12 @@ function App() {
         />
 
         <Container className={classes.buttonContainer}>
-          <Button variant="contained" color="secondary" startIcon={<CloudDownloadIcon />}>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<CloudDownloadIcon />}
+            onClick={downloadAll}
+          >
             Download All
           </Button>
         </Container>
