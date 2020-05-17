@@ -40,18 +40,18 @@ export default function Stats({
   return (
     <div className={classes.container}>
       <Typography variant="body2" color="textSecondary">
-        <em>Total files to download:</em> {filesToDownload.length}
+        <strong>Total files to download:</strong> {filesToDownload.length}
       </Typography>
       <Typography variant="body2" color="textSecondary">
-        <em>Courses to exlude: </em>
+        <strong>Courses to exlude: </strong>
         {excludedCourses.length === 0 ? 'None' : excludedCourses.map(nameOf).join(', ')}
       </Typography>
       <Typography variant="body2" color="textSecondary">
-        <em>Extensions to exclude: </em>
+        <strong>Extensions to exclude: </strong>
         {excludedExtensions.length === 0 ? 'None' : excludedExtensions.join(', ')}
       </Typography>
       <Typography variant="body2" color="textSecondary">
-        <em>Size of all files:</em> {sizeOfAllFiles()}
+        <strong>Size of all files:</strong> {sizeOfAllFiles()}
       </Typography>
     </div>
   );
