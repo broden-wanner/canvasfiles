@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Typography, Container } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -7,13 +8,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function Stats({
-  courses,
-  files,
-  excludedCourses,
-  excludedExtensions,
-  filesToDownload,
-}) {
+function Stats({ courses, files, excludedCourses, excludedExtensions, filesToDownload }) {
   const classes = useStyle();
 
   /**
@@ -56,3 +51,12 @@ export default function Stats({
     </div>
   );
 }
+
+Stats.propTypes = {
+  courses: PropTypes.array.isRequired,
+  files: PropTypes.object.isRequired,
+  excludedCourses: PropTypes.array.isRequired,
+  excludedExtensions: PropTypes.array.isRequired,
+};
+
+export default Stats;

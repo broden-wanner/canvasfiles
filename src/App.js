@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import {
-  AppBar,
-  Toolbar,
-  IconButton,
   Typography,
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -22,6 +18,7 @@ import Stats from './components/Stats';
 import AllFiles from './components/AllFiles';
 import { storageSet, storageGet, addMessageListener, downloadFiles } from './services/chromeapi';
 import { testfiles, testcourses } from './testdata';
+import TopBar from './components/TopBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,12 +26,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     backgroundColor: '#f5f5f5',
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
   },
   main: {
     padding: theme.spacing(2),
@@ -51,9 +42,6 @@ const useStyles = makeStyles((theme) => ({
   panels: {
     padding: '0 10px',
     maxHeight: 'inherit',
-  },
-  infoText: {
-    color: theme.palette.text.secondary,
   },
 }));
 
@@ -221,22 +209,7 @@ function App() {
   return (
     <Slide direction="left" in={expanded}>
       <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" className={classes.title}>
-              Canvas Files
-            </Typography>
-            <IconButton
-              edge="end"
-              onClick={onClose}
-              className={classes.closeButton}
-              color="inherit"
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+        <TopBar onClose={onClose} />
 
         <div className={classes.main}>
           <div className={classes.container}>
