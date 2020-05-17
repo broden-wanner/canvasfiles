@@ -7,9 +7,6 @@ const useStyle = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  bar: {
-    backgroundColor: 'var(--ic-brand-global-nav-bgd)',
-  },
 }));
 
 function Navbar({ onClose }) {

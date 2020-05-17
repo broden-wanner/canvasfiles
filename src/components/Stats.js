@@ -54,6 +54,7 @@ Stats.propTypes = {
   files: PropTypes.object.isRequired,
   excludedCourses: PropTypes.array.isRequired,
   excludedExtensions: PropTypes.array.isRequired,
+  filesToDownload: PropTypes.array.isRequired,
 };
 
 export default Stats;

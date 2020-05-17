@@ -10,6 +10,8 @@ import {
   Button,
   Container,
   Slide,
+  ThemeProvider,
+  createMuiTheme,
 } from '@material-ui/core';
 import { getClasses, getCourseFiles } from './services/requests';
 import CourseList from './components/CourseList';
@@ -19,6 +21,24 @@ import AllFiles from './components/AllFiles';
 import { storageSet, storageGet, addMessageListener, downloadFiles } from './services/chromeapi';
 import { testfiles, testcourses } from './testdata';
 import TopBar from './components/TopBar';
+
+const primaryColor = getComputedStyle(document.body)
+  .getPropertyValue('--ic-brand-global-nav-bgd')
+  .trim();
+const secondaryColor = getComputedStyle(document.body)
+  .getPropertyValue('--ic-brand-global-nav-menu-item__badge-bgd')
+  .trim();
+
+const customTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: primaryColor,
+    },
+    secondary: {
+      main: secondaryColor,
+    },
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,13 +55,6 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     display: 'flex',
     justifyContent: 'center',
-  },
-  downloadButton: {
-    backgroundColor: 'var(--ic-brand-global-nav-menu-item__badge-bgd)',
-    '&:hover': {
-      backgroundColor: 'var(--ic-brand-global-nav-menu-item__badge-bgd)',
-      filter: 'brightness(0.85)',
-    },
   },
   container: {
     padding: theme.spacing(2),
@@ -214,89 +227,91 @@ function App() {
   }, [courses, files, excludedCourses, excludedExtensions]);
 
   return (
-    <Slide direction="left" in={expanded}>
-      <div className={classes.root}>
-        <TopBar onClose={onClose} />
+    <ThemeProvider theme={customTheme}>
+      <Slide direction="left" in={expanded}>
+        <div className={classes.root}>
+          <TopBar onClose={onClose} />
 
-        <div className={classes.main}>
-          <div className={classes.container}>
-            <Typography variant="body2" color="textSecondary">
-              Select the courses to download files from or the file types you wish to exclude.
-            </Typography>
+          <div className={classes.main}>
+            <div className={classes.container}>
+              <Typography variant="body2" color="textSecondary">
+                Select the courses to download files from or the file types you wish to exclude.
+              </Typography>
+            </div>
+
+            <div className={classes.panels}>
+              <ExpansionPanel>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className={classes.heading}>Course List</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <CourseList
+                    courses={courses}
+                    files={files}
+                    excludedCourses={excludedCourses}
+                    handleExcludeCourse={handleExcludeCourse}
+                  />
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+
+              <ExpansionPanel>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className={classes.heading}>File Types to Exlcude</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <ExclusionList
+                    extensions={extensions}
+                    excludedExtensions={excludedExtensions}
+                    handleExcludeExtension={handleExcludeExtension}
+                  />
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+
+              <ExpansionPanel>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className={classes.heading}>Files to Download</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails className={classes.panelDetails}>
+                  <AllFiles courses={courses} filesToDownload={filesToDownload} />
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </div>
+
+            <Stats
+              courses={courses}
+              files={files}
+              excludedCourses={excludedCourses}
+              excludedExtensions={excludedExtensions}
+              filesToDownload={filesToDownload}
+            />
+
+            <Container className={classes.buttonContainer}>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<CloudDownloadIcon />}
+                onClick={downloadAll}
+                className={classes.downloadButton}
+              >
+                Download Files
+              </Button>
+            </Container>
           </div>
-
-          <div className={classes.panels}>
-            <ExpansionPanel>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography className={classes.heading}>Course List</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <CourseList
-                  courses={courses}
-                  files={files}
-                  excludedCourses={excludedCourses}
-                  handleExcludeCourse={handleExcludeCourse}
-                />
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-
-            <ExpansionPanel>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography className={classes.heading}>File Types to Exlcude</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <ExclusionList
-                  extensions={extensions}
-                  excludedExtensions={excludedExtensions}
-                  handleExcludeExtension={handleExcludeExtension}
-                />
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-
-            <ExpansionPanel>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography className={classes.heading}>Files to Download</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails className={classes.panelDetails}>
-                <AllFiles courses={courses} filesToDownload={filesToDownload} />
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          </div>
-
-          <Stats
-            courses={courses}
-            files={files}
-            excludedCourses={excludedCourses}
-            excludedExtensions={excludedExtensions}
-            filesToDownload={filesToDownload}
-          />
-
-          <Container className={classes.buttonContainer}>
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<CloudDownloadIcon />}
-              onClick={downloadAll}
-              className={classes.downloadButton}
-            >
-              Download Files
-            </Button>
-          </Container>
         </div>
-      </div>
-    </Slide>
+      </Slide>
+    </ThemeProvider>
   );
 }
 
