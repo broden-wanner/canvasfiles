@@ -155,6 +155,8 @@ function App() {
     }
 
     setExcludedCourses(newExcluded);
+    // eslint-disable-next-line
+    chrome.storage.sync.set({ excludedCourses: newExcluded });
   };
 
   /**
@@ -172,6 +174,8 @@ function App() {
     }
 
     setExcludedExtensions(newExcluded);
+    // eslint-disable-next-line
+    chrome.storage.sync.set({ excludedExtensions: newExcluded });
   };
 
   /**
@@ -185,6 +189,13 @@ function App() {
   useEffect(() => {
     // TODO: uncomment this after development
     // retrieveCourseList(retrieveCourseFiles);
+    const varsToGet = ['excludedExtensions', 'excludedCourses'];
+    // eslint-disable-next-line
+    chrome.storage.sync.get(varsToGet, (result) => {
+      const { excludedExtensions, excludedCourses } = result;
+      excludedExtensions && setExcludedExtensions(excludedExtensions);
+      excludedCourses && setExcludedCourses(excludedCourses);
+    });
   }, []);
 
   // Update the files to download when the following change
