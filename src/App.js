@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [courses, setCourses] = useState(testcourses);
   const [files, setFiles] = useState(testfiles);
   const [excludedExtensions, setExcludedExtensions] = useState([]);
@@ -70,6 +70,8 @@ function App() {
   chrome.runtime.onMessage.addListener(({ message }, sender) => {
     if (message === 'toggle') {
       setExpanded(!expanded);
+      // eslint-disable-next-line
+      chrome.storage.sync.set({ open: !expanded });
     }
   });
 
@@ -189,10 +191,12 @@ function App() {
   };
 
   /**
-   * Use the global togglePanel function defined in content.js to close it
+   * Close the panel and store its state
    */
   const onClose = () => {
     setExpanded(false);
+    // eslint-disable-next-line
+    chrome.storage.sync.set({ open: false });
   };
 
   /**
@@ -207,6 +211,14 @@ function App() {
   useEffect(() => {
     // TODO: uncomment this after development
     // retrieveCourseList(retrieveCourseFiles);
+    // eslint-disable-next-line
+    chrome.storage.sync.get(['open'], (result) => {
+      if (result.open) {
+        setExpanded(true);
+      } else {
+        setExpanded(false);
+      }
+    });
     const varsToGet = ['excludedExtensions', 'excludedCourses'];
     // eslint-disable-next-line
     chrome.storage.sync.get(varsToGet, (result) => {
