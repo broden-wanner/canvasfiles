@@ -3,7 +3,6 @@
   "name": "Canvas Files",
   "description": "Download all your files from Canvas",
   "version": "0.0.1",
-  "default_locale": "en",
   "manifest_version": 2,
   "icons": {
     "16": "favicon-16x16.png",
