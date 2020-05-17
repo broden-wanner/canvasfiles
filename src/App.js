@@ -20,6 +20,7 @@ import CourseList from './components/CourseList';
 import ExclusionList from './components/ExclusionList';
 import Stats from './components/Stats';
 import AllFiles from './components/AllFiles';
+import { storageSet, storageGet, addMessageListener } from './services/chromeapi';
 import { testfiles, testcourses } from './testdata';
 
 const useStyles = makeStyles((theme) => ({
@@ -66,13 +67,9 @@ function App() {
   const classes = useStyles();
 
   // Add toggle listener for the entire side panel
-  // eslint-disable-next-line
-  chrome.runtime.onMessage.addListener(({ message }, sender) => {
-    if (message === 'toggle') {
-      setExpanded(!expanded);
-      // eslint-disable-next-line
-      chrome.storage.sync.set({ open: !expanded });
-    }
+  addMessageListener('toggle', () => {
+    setExpanded(!expanded);
+    storageSet({ open: !expanded });
   });
 
   /**
@@ -167,8 +164,7 @@ function App() {
     }
 
     setExcludedCourses(newExcluded);
-    // eslint-disable-next-line
-    chrome.storage.sync.set({ excludedCourses: newExcluded });
+    storageSet({ excludedCourses: newExcluded });
   };
 
   /**
@@ -186,8 +182,7 @@ function App() {
     }
 
     setExcludedExtensions(newExcluded);
-    // eslint-disable-next-line
-    chrome.storage.sync.set({ excludedExtensions: newExcluded });
+    storageSet({ excludedExtensions: newExcluded });
   };
 
   /**
@@ -195,8 +190,7 @@ function App() {
    */
   const onClose = () => {
     setExpanded(false);
-    // eslint-disable-next-line
-    chrome.storage.sync.set({ open: false });
+    storageSet({ open: false });
   };
 
   /**
@@ -211,20 +205,12 @@ function App() {
   useEffect(() => {
     // TODO: uncomment this after development
     // retrieveCourseList(retrieveCourseFiles);
-    // eslint-disable-next-line
-    chrome.storage.sync.get(['open'], (result) => {
-      if (result.open) {
-        setExpanded(true);
-      } else {
-        setExpanded(false);
-      }
-    });
-    const varsToGet = ['excludedExtensions', 'excludedCourses'];
-    // eslint-disable-next-line
-    chrome.storage.sync.get(varsToGet, (result) => {
-      const { excludedExtensions, excludedCourses } = result;
+    // Retrieve initial values from storage
+    storageGet(['excludedExtensions', 'excludedCourses', 'open'], (result) => {
+      const { excludedExtensions, excludedCourses, open } = result;
       excludedExtensions && setExcludedExtensions(excludedExtensions);
       excludedCourses && setExcludedCourses(excludedCourses);
+      setExpanded(!!open);
     });
   }, []);
 
