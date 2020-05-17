@@ -36,16 +36,13 @@ function Stats({ courses, files, excludedCourses, excludedExtensions, filesToDow
     <div className={classes.container}>
       <Typography variant="body2" color="textSecondary">
         <strong>Total files to download:</strong> {filesToDownload.length}
-      </Typography>
-      <Typography variant="body2" color="textSecondary">
+        <br />
         <strong>Courses to exlude: </strong>
         {excludedCourses.length === 0 ? 'None' : excludedCourses.map(nameOf).join(', ')}
-      </Typography>
-      <Typography variant="body2" color="textSecondary">
+        <br />
         <strong>Extensions to exclude: </strong>
         {excludedExtensions.length === 0 ? 'None' : excludedExtensions.join(', ')}
-      </Typography>
-      <Typography variant="body2" color="textSecondary">
+        <br />
         <strong>Size of all files:</strong> {sizeOfAllFiles()}
       </Typography>
     </div>
