@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import CourseList from './components/CourseList';
-import ExclusionList from './components/ExclusionList';
 import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   Button,
   Container,
+  Slide,
 } from '@material-ui/core';
 import { getClasses, getCourseFiles } from './services/requests';
+import CourseList from './components/CourseList';
+import ExclusionList from './components/ExclusionList';
 import Stats from './components/Stats';
 import AllFiles from './components/AllFiles';
 import { testfiles, testcourses } from './testdata';
@@ -56,12 +57,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [expanded, setExpanded] = useState(true);
   const [courses, setCourses] = useState(testcourses);
   const [files, setFiles] = useState(testfiles);
   const [excludedExtensions, setExcludedExtensions] = useState([]);
   const [excludedCourses, setExcludedCourses] = useState([]);
   const [filesToDownload, setFilesToDownload] = useState([]);
   const classes = useStyles();
+
+  // Add toggle listener for the entire side panel
+  // eslint-disable-next-line
+  chrome.runtime.onMessage.addListener(({ message }, sender) => {
+    if (message === 'toggle') {
+      setExpanded(!expanded);
+    }
+  });
 
   /**
    * Returns a string for the size of the file
@@ -182,7 +192,7 @@ function App() {
    * Use the global togglePanel function defined in content.js to close it
    */
   const onClose = () => {
-    togglePanel(); // eslint-disable-line
+    setExpanded(false);
   };
 
   /**
@@ -212,101 +222,103 @@ function App() {
   }, [courses, files, excludedCourses, excludedExtensions]);
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Canvas Files
-          </Typography>
-          <IconButton
-            edge="end"
-            onClick={onClose}
-            className={classes.closeButton}
-            color="inherit"
-            aria-label="close"
-          >
-            <CloseIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+    <Slide direction="left" in={expanded}>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" className={classes.title}>
+              Canvas Files
+            </Typography>
+            <IconButton
+              edge="end"
+              onClick={onClose}
+              className={classes.closeButton}
+              color="inherit"
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
 
-      <div className={classes.main}>
-        <div className={classes.container}>
-          <Typography variant="body2" color="textSecondary">
-            Select the courses to download files from or the file types you wish to exclude.
-          </Typography>
+        <div className={classes.main}>
+          <div className={classes.container}>
+            <Typography variant="body2" color="textSecondary">
+              Select the courses to download files from or the file types you wish to exclude.
+            </Typography>
+          </div>
+
+          <div className={classes.panels}>
+            <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={classes.heading}>Course List</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <CourseList
+                  courses={courses}
+                  files={files}
+                  excludedCourses={excludedCourses}
+                  handleExcludeCourse={handleExcludeCourse}
+                />
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+
+            <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={classes.heading}>File Types to Exlcude</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <ExclusionList
+                  extensions={extensions}
+                  excludedExtensions={excludedExtensions}
+                  handleExcludeExtension={handleExcludeExtension}
+                />
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+
+            <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={classes.heading}>Files to Download</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails className={classes.panelDetails}>
+                <AllFiles courses={courses} filesToDownload={filesToDownload} />
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          </div>
+
+          <Stats
+            courses={courses}
+            files={files}
+            excludedCourses={excludedCourses}
+            excludedExtensions={excludedExtensions}
+            filesToDownload={filesToDownload}
+          />
+
+          <Container className={classes.buttonContainer}>
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<CloudDownloadIcon />}
+              onClick={downloadAll}
+            >
+              Download All
+            </Button>
+          </Container>
         </div>
-
-        <div className={classes.panels}>
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>Course List</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <CourseList
-                courses={courses}
-                files={files}
-                excludedCourses={excludedCourses}
-                handleExcludeCourse={handleExcludeCourse}
-              />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>File Types to Exlcude</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <ExclusionList
-                extensions={extensions}
-                excludedExtensions={excludedExtensions}
-                handleExcludeExtension={handleExcludeExtension}
-              />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>Files to Download</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.panelDetails}>
-              <AllFiles courses={courses} filesToDownload={filesToDownload} />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        </div>
-
-        <Stats
-          courses={courses}
-          files={files}
-          excludedCourses={excludedCourses}
-          excludedExtensions={excludedExtensions}
-          filesToDownload={filesToDownload}
-        />
-
-        <Container className={classes.buttonContainer}>
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<CloudDownloadIcon />}
-            onClick={downloadAll}
-          >
-            Download All
-          </Button>
-        </Container>
       </div>
-    </div>
+    </Slide>
   );
 }
 

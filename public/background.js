@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener(() => {
       {
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { hostEquals: 'canvas.umn.ed' },
+            pageUrl: { hostEquals: 'canvas.umn.edu' },
           }),
         ],
         actions: [new chrome.declarativeContent.ShowPageAction()],
