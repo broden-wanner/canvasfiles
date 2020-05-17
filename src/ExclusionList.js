@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
   list: {
     width: '100%',
   },
+  item: {
+    padding: 0,
+  },
 }));
 
 function ExclusionList({ extensions, excludedExtensions, handleExcludeExtension }) {
@@ -31,6 +34,7 @@ function ExclusionList({ extensions, excludedExtensions, handleExcludeExtension 
               <React.Fragment>
                 <ListItem
                   key={i}
+                  className={classes.item}
                   role="listitem"
                   button
                   onClick={() => handleExcludeExtension(ext)}

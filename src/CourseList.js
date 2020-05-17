@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginLeft: theme.spacing(2),
   },
+  item: {
+    padding: 0,
+  },
 }));
 
 function CourseList({ courses, files, excludedCourses, handleExcludeCourse }) {
@@ -35,13 +38,14 @@ function CourseList({ courses, files, excludedCourses, handleExcludeCourse }) {
               <React.Fragment>
                 <ListItem
                   key={c.id}
+                  className={classes.item}
                   role="listitem"
                   button
                   onClick={() => handleExcludeCourse(c.id)}
                 >
                   <ListItemIcon>
                     <Checkbox
-                      checked={excludedCourses.includes(c.id)}
+                      checked={!excludedCourses.includes(c.id)}
                       tabIndex={-1}
                       inputProps={{ 'aria-labelledby': c.id }}
                     />

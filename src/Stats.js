@@ -1,4 +1,11 @@
 import React from 'react';
+import { makeStyles, Typography, Container } from '@material-ui/core';
+
+const useStyle = makeStyles((theme) => ({
+  container: {
+    padding: theme.spacing(2),
+  },
+}));
 
 export default function Stats({
   courses,
@@ -7,6 +14,8 @@ export default function Stats({
   excludedExtensions,
   filesToDownload,
 }) {
+  const classes = useStyle();
+
   /**
    * Finds the name of the course with id number `cid`
    * @param {number} cid - course id number
@@ -29,17 +38,21 @@ export default function Stats({
   };
 
   return (
-    <div>
-      <p>Total files to download: {filesToDownload.length}</p>
-      <p>
-        Courses to exlude:{' '}
+    <div className={classes.container}>
+      <Typography variant="body2" color="textSecondary">
+        <em>Total files to download:</em> {filesToDownload.length}
+      </Typography>
+      <Typography variant="body2" color="textSecondary">
+        <em>Courses to exlude: </em>
         {excludedCourses.length === 0 ? 'None' : excludedCourses.map(nameOf).join(', ')}
-      </p>
-      <p>
-        Extensions to exclude:{' '}
+      </Typography>
+      <Typography variant="body2" color="textSecondary">
+        <em>Extensions to exclude: </em>
         {excludedExtensions.length === 0 ? 'None' : excludedExtensions.join(', ')}
-      </p>
-      <p>Size of all files: {sizeOfAllFiles()}</p>
+      </Typography>
+      <Typography variant="body2" color="textSecondary">
+        <em>Size of all files:</em> {sizeOfAllFiles()}
+      </Typography>
     </div>
   );
 }
