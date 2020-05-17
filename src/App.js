@@ -20,7 +20,7 @@ import CourseList from './components/CourseList';
 import ExclusionList from './components/ExclusionList';
 import Stats from './components/Stats';
 import AllFiles from './components/AllFiles';
-import { storageSet, storageGet, addMessageListener } from './services/chromeapi';
+import { storageSet, storageGet, addMessageListener, downloadFiles } from './services/chromeapi';
 import { testfiles, testcourses } from './testdata';
 
 const useStyles = makeStyles((theme) => ({
@@ -197,7 +197,6 @@ function App() {
    * Download all files using the global downloadFiles function
    */
   const downloadAll = () => {
-    // eslint-disable-next-line
     downloadFiles(filesToDownload);
   };
 

@@ -26,13 +26,11 @@ chrome.browserAction.onClicked.addListener((tab) => {
 });
 
 // Add a listener for downloading files
-chrome.runtime.onConnect.addListener((port) => {
-  console.assert(port.name === 'download');
-  port.onMessage.addListener((msg) => {
-    if (msg.downloadList && msg.downloadList.length !== 0) {
-      for (const f of msg.downloadList) {
-        chrome.downloads.download({ url: f.url });
-      }
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.downloadList && msg.downloadList.length !== 0) {
+    // Download every file in the downloadList array
+    for (const f of msg.downloadList) {
+      chrome.downloads.download({ url: f.url });
     }
-  });
+  }
 });

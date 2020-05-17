@@ -31,3 +31,12 @@ export function storageGet(keys, fn) {
   // eslint-disable-next-line
   chrome.storage.sync.get(keys, fn);
 }
+
+/**
+ * Sends a message to the background script to download the files in the list
+ * @param {Array[File]} downloadList - a list of files to be downloaded
+ */
+export function downloadFiles(downloadList) {
+  // eslint-disable-next-line
+  chrome.runtime.sendMessage({ downloadList: downloadList });
+}

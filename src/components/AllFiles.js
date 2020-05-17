@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, ListItem, ListItemText, Divider, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { downloadFiles } from '../services/chromeapi';
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -19,7 +20,7 @@ function AllFiles({ courses, filesToDownload }) {
    * @param {File} f - a file object to download
    */
   const startDownload = (f) => {
-    downloadFiles([f]); // eslint-disable-line
+    downloadFiles([f]);
   };
 
   return (
