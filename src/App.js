@@ -36,6 +36,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  downloadButton: {
+    backgroundColor: 'var(--ic-brand-global-nav-menu-item__badge-bgd)',
+    '&:hover': {
+      backgroundColor: 'var(--ic-brand-global-nav-menu-item__badge-bgd)',
+      filter: 'brightness(0.85)',
+    },
+  },
   container: {
     padding: theme.spacing(2),
   },
@@ -282,8 +289,9 @@ function App() {
               color="secondary"
               startIcon={<CloudDownloadIcon />}
               onClick={downloadAll}
+              className={classes.downloadButton}
             >
-              Download All
+              Download Files
             </Button>
           </Container>
         </div>
