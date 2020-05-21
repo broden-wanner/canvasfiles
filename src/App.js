@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [courses, setCourses] = useState(testcourses);
   const [files, setFiles] = useState(testfiles);
   const [excludedExtensions, setExcludedExtensions] = useState([]);
@@ -210,14 +210,13 @@ function App() {
 
   // Retrieve the course list and files on initialization
   useEffect(() => {
-    // TODO: uncomment this after development
-    // retrieveCourseList(retrieveCourseFiles);
+    retrieveCourseList(retrieveCourseFiles);
     // Retrieve initial values from storage
     storageGet(['excludedExtensions', 'excludedCourses', 'open'], (result) => {
       const { excludedExtensions, excludedCourses, open } = result;
       excludedExtensions && setExcludedExtensions(excludedExtensions);
       excludedCourses && setExcludedCourses(excludedCourses);
-      setExpanded(!!open);
+      // setExpanded(!!open);
     });
   }, []);
 
