@@ -66,19 +66,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [courses, setCourses] = useState(testcourses);
   const [files, setFiles] = useState(testfiles);
   const [excludedExtensions, setExcludedExtensions] = useState([]);
   const [excludedCourses, setExcludedCourses] = useState([]);
   const [filesToDownload, setFilesToDownload] = useState([]);
   const classes = useStyles();
-
-  // Add toggle listener for the entire side panel
-  addMessageListener('toggle', () => {
-    setExpanded(!expanded);
-    storageSet({ open: !expanded });
-  });
 
   /**
    * Returns a string for the size of the file
@@ -209,14 +203,30 @@ function App() {
   };
 
   // Retrieve the course list and files on initialization
+  // Everything in this useEffect function is executed once upon init
   useEffect(() => {
+    // Add toggle listener for the entire side panel
+    addMessageListener('toggle', () => {
+      storageGet(['open'], (result) => {
+        setExpanded(!result.open);
+        storageSet({ open: !result.open });
+      });
+    });
+
+    // Get the course list and files
     retrieveCourseList(retrieveCourseFiles);
+
     // Retrieve initial values from storage
     storageGet(['excludedExtensions', 'excludedCourses', 'open'], (result) => {
       const { excludedExtensions, excludedCourses, open } = result;
       excludedExtensions && setExcludedExtensions(excludedExtensions);
       excludedCourses && setExcludedCourses(excludedCourses);
-      // setExpanded(!!open);
+      if (typeof open === 'undefined') {
+        setExpanded(true);
+        storageSet({ open: true });
+      } else {
+        setExpanded(open);
+      }
     });
   }, []);
 
