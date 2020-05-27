@@ -30,7 +30,7 @@ chrome.runtime.onMessage.addListener((msg) => {
   if (msg.downloadList && msg.downloadList.length !== 0) {
     // Download every file in the downloadList array
     for (const f of msg.downloadList) {
-      chrome.downloads.download({ url: f.url });
+      chrome.downloads.download({ url: f.url, filename: `${f.courseName}/${f.display_name}` });
     }
   }
 });

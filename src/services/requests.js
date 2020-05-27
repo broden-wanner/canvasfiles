@@ -18,7 +18,7 @@ function handleErrors(response) {
 export function getClasses() {
   const url = new URL(`${API_URL}/courses`);
   url.searchParams.append('enrollment_type', 'student');
-  url.searchParams.append('enrollment_state', 'active');
+  // url.searchParams.append('enrollment_state', 'active');
   url.searchParams.append('per_page', '100');
 
   return fetch(url, {
