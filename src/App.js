@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {
   Typography,
   ExpansionPanel,
@@ -18,7 +19,13 @@ import CourseList from './components/CourseList';
 import ExclusionList from './components/ExclusionList';
 import Stats from './components/Stats';
 import AllFiles from './components/AllFiles';
-import { storageSet, storageGet, addMessageListener, downloadFiles } from './services/chromeapi';
+import {
+  storageSet,
+  storageGet,
+  addMessageListener,
+  downloadFiles,
+  showDownloadFolder,
+} from './services/chromeapi';
 import { testfiles, testcourses } from './testdata';
 import TopBar from './components/TopBar';
 
@@ -54,7 +61,11 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  button: {
+    margin: theme.spacing(1),
   },
   container: {
     padding: theme.spacing(2),
@@ -309,10 +320,19 @@ function App() {
             <Container className={classes.buttonContainer}>
               <Button
                 variant="contained"
+                color="primary"
+                startIcon={<FolderOpenIcon />}
+                onClick={showDownloadFolder}
+                className={classes.button}
+              >
+                See Download Folder
+              </Button>
+              <Button
+                variant="contained"
                 color="secondary"
                 startIcon={<CloudDownloadIcon />}
                 onClick={downloadAll}
-                className={classes.downloadButton}
+                className={classes.button}
               >
                 Download Files
               </Button>

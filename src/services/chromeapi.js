@@ -40,3 +40,11 @@ export function downloadFiles(downloadList) {
   // eslint-disable-next-line
   chrome.runtime.sendMessage({ downloadList: downloadList });
 }
+
+/**
+ * Shows the current download folder in the file explorer
+ */
+export function showDownloadFolder() {
+  // eslint-disable-next-line
+  chrome.runtime.sendMessage({ msg: 'showDownloadFolder' });
+}
