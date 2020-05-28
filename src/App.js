@@ -13,6 +13,9 @@ import {
   Slide,
   ThemeProvider,
   createMuiTheme,
+  Stepper,
+  Step,
+  StepLabel,
 } from '@material-ui/core';
 import { getClasses, getCourseFiles } from './services/requests';
 import CourseList from './components/CourseList';
@@ -74,6 +77,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '0 10px',
     maxHeight: 'inherit',
   },
+  stepperButtons: {
+    marginTop: theme.spacing(4),
+  },
 }));
 
 function App() {
@@ -83,6 +89,7 @@ function App() {
   const [excludedExtensions, setExcludedExtensions] = useState([]);
   const [excludedCourses, setExcludedCourses] = useState([]);
   const [filesToDownload, setFilesToDownload] = useState([]);
+  const [activeStep, setActiveStep] = useState(0);
   const classes = useStyles();
 
   /**
@@ -213,46 +220,31 @@ function App() {
     downloadFiles(filesToDownload);
   };
 
-  // Retrieve the course list and files on initialization
-  // Everything in this useEffect function is executed once upon init
-  useEffect(() => {
-    // Add toggle listener for the entire side panel
-    addMessageListener('toggle', () => {
-      storageGet(['open'], (result) => {
-        setExpanded(!result.open);
-        storageSet({ open: !result.open });
-      });
-    });
+  const steps = ['Select courses', 'Check settings', 'Download files'];
 
-    // Get the course list and files
-    retrieveCourseList(retrieveCourseFiles);
+  /**
+   * Handles going back in the stepper
+   */
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
-    // Retrieve initial values from storage
-    storageGet(['excludedExtensions', 'excludedCourses', 'open'], (result) => {
-      const { excludedExtensions, excludedCourses, open } = result;
-      excludedExtensions && setExcludedExtensions(excludedExtensions);
-      excludedCourses && setExcludedCourses(excludedCourses);
-      if (typeof open === 'undefined') {
-        setExpanded(true);
-        storageSet({ open: true });
-      } else {
-        setExpanded(open);
-      }
-    });
-  }, []);
+  /**
+   * Handles going forward in the stepper
+   */
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
 
-  // Update the files to download when the following change
-  useEffect(() => {
-    updateFilesToDownload();
-  }, [courses, files, excludedCourses, excludedExtensions]);
-
-  return (
-    <ThemeProvider theme={customTheme}>
-      <Slide direction="left" in={expanded}>
-        <div className={classes.root}>
-          <TopBar onClose={onClose} />
-
-          <div className={classes.main}>
+  /**
+   * This is a switch function for the stepper, giving conent based on the step number
+   * @param {number} step - the step the stepper is on
+   */
+  const getStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <React.Fragment>
             <div className={classes.container}>
               <Typography variant="body2" color="textSecondary">
                 Select the courses to download files from or the file types you wish to exclude.
@@ -316,17 +308,55 @@ function App() {
               excludedExtensions={excludedExtensions}
               filesToDownload={filesToDownload}
             />
-
+          </React.Fragment>
+        );
+      case 1:
+        return (
+          <React.Fragment>
+            <div className={classes.container}>
+              <Typography variant="body2" color="textSecondary">
+                Go to you Chrome Settings and scroll down to the 'Advanced' button. Click this and
+                ensure that, under the 'Downloads' section, the "Ask where to save each file before
+                downloading" option is turned <strong>off</strong>.
+                <br />
+                <br />
+                Then, click the following button to ensure that your files will be downloaded to the
+                correct folder. If this is not correct, go into the 'Downloads' section of the
+                settings again and set your preferred download location.
+              </Typography>
+            </div>
             <Container className={classes.buttonContainer}>
               <Button
                 variant="contained"
-                color="primary"
+                color="secondary"
                 startIcon={<FolderOpenIcon />}
                 onClick={showDownloadFolder}
                 className={classes.button}
               >
                 See Download Folder
               </Button>
+            </Container>
+          </React.Fragment>
+        );
+      case 2:
+        return (
+          <React.Fragment>
+            <div className={classes.container}>
+              <Typography variant="body2" color="textSecondary">
+                Ensure that everything is correct in the previous steps and click the following
+                button to download. All files will be place into folders for their respective
+                course. Example: the file "Physics Test 1.pdf" will be placed under a "PHYS 1301"
+                folder.
+              </Typography>
+            </div>
+            <Stats
+              courses={courses}
+              files={files}
+              excludedCourses={excludedCourses}
+              excludedExtensions={excludedExtensions}
+              filesToDownload={filesToDownload}
+            />
+            <Container className={classes.buttonContainer}>
               <Button
                 variant="contained"
                 color="secondary"
@@ -337,6 +367,82 @@ function App() {
                 Download Files
               </Button>
             </Container>
+          </React.Fragment>
+        );
+      default:
+        return 'Unknown step';
+    }
+  };
+
+  // Retrieve the course list and files on initialization
+  // Everything in this useEffect function is executed once upon init
+  useEffect(() => {
+    // Add toggle listener for the entire side panel
+    addMessageListener('toggle', () => {
+      storageGet(['open'], (result) => {
+        setExpanded(!result.open);
+        storageSet({ open: !result.open });
+      });
+    });
+
+    // Get the course list and files
+    retrieveCourseList(retrieveCourseFiles);
+
+    // Retrieve initial values from storage
+    storageGet(['excludedExtensions', 'excludedCourses', 'open'], (result) => {
+      const { excludedExtensions, excludedCourses, open } = result;
+      excludedExtensions && setExcludedExtensions(excludedExtensions);
+      excludedCourses && setExcludedCourses(excludedCourses);
+      if (typeof open === 'undefined') {
+        setExpanded(true);
+        storageSet({ open: true });
+      } else {
+        setExpanded(open);
+      }
+    });
+  }, []);
+
+  // Update the files to download when the following change
+  useEffect(() => {
+    updateFilesToDownload();
+  }, [courses, files, excludedCourses, excludedExtensions]);
+
+  return (
+    <ThemeProvider theme={customTheme}>
+      <Slide direction="left" in={expanded}>
+        <div className={classes.root}>
+          <TopBar onClose={onClose} />
+
+          <div className={classes.main}>
+            <Stepper activeStep={activeStep}>
+              {steps.map((label, index) => {
+                return (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                );
+              })}
+            </Stepper>
+
+            <div>
+              <div className={classes.stepperConent}>{getStepContent(activeStep)}</div>
+
+              <div className={classes.stepperButtons}>
+                <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+                  Back
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.button}
+                  disabled={activeStep === steps.length - 1}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </Slide>
