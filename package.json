@@ -19,7 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "onchange 'src/*.js' 'public/*.js' 'public/*.json' -- npm run build",
-    "zip": "zip -r canvasfiles.zip build"
+    "zip": "cd build; zip -r ../canvasfiles.zip *"
   },
   "eslintConfig": {
     "extends": "react-app"
