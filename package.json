@@ -18,7 +18,8 @@
     "build": "react-scripts build && node scripts/manifest.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "onchange 'src/*.js' 'public/*.js' 'public/*.json' -- npm run build"
+    "dev": "onchange 'src/*.js' 'public/*.js' 'public/*.json' -- npm run build",
+    "zip": "zip -r canvasfiles.zip build"
   },
   "eslintConfig": {
     "extends": "react-app"
