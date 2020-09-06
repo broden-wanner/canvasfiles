@@ -1,4 +1,4 @@
-const API_URL = 'https://canvas.umn.edu/api/v1';
+const API_URL = "https://canvas.umn.edu/api/v1";
 
 /**
  * Handles the errors for responses from the fetch API
@@ -17,14 +17,14 @@ function handleErrors(response) {
  */
 export function getClasses() {
   const url = new URL(`${API_URL}/courses`);
-  url.searchParams.append('enrollment_type', 'student');
-  // url.searchParams.append('enrollment_state', 'active');
-  url.searchParams.append('per_page', '100');
+  url.searchParams.append("enrollment_type", "student");
+  url.searchParams.append("enrollment_state", "active");
+  url.searchParams.append("per_page", "100");
 
   return fetch(url, {
     headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
   })
     .then(handleErrors)
@@ -37,12 +37,12 @@ export function getClasses() {
  */
 export function getCourseFiles(id) {
   const url = new URL(`${API_URL}/courses/${id}/files`);
-  url.searchParams.append('per_page', '1000');
+  url.searchParams.append("per_page", "1000");
 
   return fetch(url, {
     headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
   })
     .then(handleErrors)

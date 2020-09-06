@@ -2,7 +2,7 @@
   "short_name": "Canvas Files",
   "name": "Canvas Files",
   "description": "Download all your files from Canvas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifest_version": 2,
   "icons": {
     "16": "favicon-16x16.png",

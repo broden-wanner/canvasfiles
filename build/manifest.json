@@ -1,1 +1,43 @@
-{"short_name":"Canvas Files","name":"Canvas Files","description":"Download all your files from Canvas","version":"1.0.0","manifest_version":2,"icons":{"16":"favicon-16x16.png","32":"favicon-32x32.png","48":"icon48.png","128":"icon128.png","192":"android-chrome-192x192.png","512":"android-chrome-512x512.png"},"permissions":["declarativeContent","activeTab","storage","downloads"],"background":{"scripts":["background.js"]},"content_scripts":[{"matches":["https://canvas.umn.edu/"],"js":["content.js","static/js/2.04173c82.chunk.js","static/js/main.e190715f.chunk.js","static/js/runtime-main.bfd9fdfc.js"],"css":["static/css/main.76e6761e.chunk.css"]}],"browser_action":{}}
+{
+  "short_name": "Canvas Files",
+  "name": "Canvas Files",
+  "description": "Download all your files from Canvas",
+  "version": "1.0.1",
+  "manifest_version": 2,
+  "icons": {
+    "16": "favicon-16x16.png",
+    "32": "favicon-32x32.png",
+    "48": "icon48.png",
+    "128": "icon128.png",
+    "192": "android-chrome-192x192.png",
+    "512": "android-chrome-512x512.png"
+  },
+  "permissions": [
+    "declarativeContent",
+    "activeTab",
+    "storage",
+    "downloads"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://canvas.umn.edu/"
+      ],
+      "js": [
+        "content.js",
+        "static/js/2.efa7677e.chunk.js",
+        "static/js/main.41159a94.chunk.js",
+        "static/js/runtime-main.bb9a1bd9.js"
+      ],
+      "css": [
+        "static/css/main.b43d50eb.chunk.css"
+      ]
+    }
+  ],
+  "browser_action": {}
+}

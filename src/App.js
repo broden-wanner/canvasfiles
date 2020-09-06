@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
+import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import {
   Typography,
   ExpansionPanel,
@@ -16,27 +16,27 @@ import {
   Stepper,
   Step,
   StepLabel,
-} from '@material-ui/core';
-import { getClasses, getCourseFiles } from './services/requests';
-import CourseList from './components/CourseList';
-import ExclusionList from './components/ExclusionList';
-import Stats from './components/Stats';
-import AllFiles from './components/AllFiles';
+} from "@material-ui/core";
+import { getClasses, getCourseFiles } from "./services/requests";
+import CourseList from "./components/CourseList";
+import ExclusionList from "./components/ExclusionList";
+import Stats from "./components/Stats";
+import AllFiles from "./components/AllFiles";
 import {
   storageSet,
   storageGet,
   addMessageListener,
   downloadFiles,
   showDownloadFolder,
-} from './services/chromeapi';
-import { testfiles, testcourses } from './testdata';
-import TopBar from './components/TopBar';
+} from "./services/chromeapi";
+import { testfiles, testcourses } from "./testdata";
+import TopBar from "./components/TopBar";
 
 const primaryColor = getComputedStyle(document.body)
-  .getPropertyValue('--ic-brand-global-nav-bgd')
+  .getPropertyValue("--ic-brand-global-nav-bgd")
   .trim();
 const secondaryColor = getComputedStyle(document.body)
-  .getPropertyValue('--ic-brand-global-nav-menu-item__badge-bgd')
+  .getPropertyValue("--ic-brand-global-nav-menu-item__badge-bgd")
   .trim();
 
 const customTheme = createMuiTheme({
@@ -53,19 +53,19 @@ const customTheme = createMuiTheme({
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#f5f5f5',
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#f5f5f5",
   },
   main: {
     padding: theme.spacing(2),
-    height: '90%',
-    overflowY: 'auto',
+    height: "90%",
+    overflowY: "auto",
   },
   buttonContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   button: {
     margin: theme.spacing(1),
@@ -74,8 +74,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   panels: {
-    padding: '0 10px',
-    maxHeight: 'inherit',
+    padding: "0 10px",
+    maxHeight: "inherit",
   },
   stepperButtons: {
     marginTop: theme.spacing(4),
@@ -125,9 +125,9 @@ function App() {
       getCourseFiles(course.id).then((fileList) => {
         idsToFiles[course.id] = fileList.map((f) => {
           // Add the course name to the file for display
-          f['courseName'] = course.name;
+          f["courseName"] = course.name;
           // Create the size to display
-          f['displaySize'] = fileSize(f.size);
+          f["displaySize"] = fileSize(f.size);
           return f;
         });
         setFiles({ ...idsToFiles });
@@ -165,7 +165,18 @@ function App() {
     setFilesToDownload(dl);
   };
 
-  const extensions = ['docx', 'pdf', 'mp4', 'mp3', 'm4a', 'wav', 'pptx', 'png', 'jpg', 'jpeg'];
+  const extensions = [
+    "docx",
+    "pdf",
+    "mp4",
+    "mp3",
+    "m4a",
+    "wav",
+    "pptx",
+    "png",
+    "jpg",
+    "jpeg",
+  ];
 
   /**
    * Handles excluding a course from downloads
@@ -220,7 +231,7 @@ function App() {
     downloadFiles(filesToDownload);
   };
 
-  const steps = ['Select courses', 'Check settings', 'Download files'];
+  const steps = ["Select courses", "Check settings", "Download files"];
 
   /**
    * Handles going back in the stepper
@@ -237,7 +248,7 @@ function App() {
   };
 
   /**
-   * This is a switch function for the stepper, giving conent based on the step number
+   * This is a switch function for the stepper, giving content based on the step number
    * @param {number} step - the step the stepper is on
    */
   const getStepContent = (step) => {
@@ -247,7 +258,8 @@ function App() {
           <React.Fragment>
             <div className={classes.container}>
               <Typography variant="body2" color="textSecondary">
-                Select the courses to download files from or the file types you wish to exclude.
+                Select the courses to download files from or the file types you
+                wish to exclude.
               </Typography>
             </div>
 
@@ -258,7 +270,9 @@ function App() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography className={classes.heading}>Course List</Typography>
+                  <Typography className={classes.heading}>
+                    Course List
+                  </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   <CourseList
@@ -276,7 +290,9 @@ function App() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography className={classes.heading}>File Types to Exlcude</Typography>
+                  <Typography className={classes.heading}>
+                    File Types to Exlcude
+                  </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   <ExclusionList
@@ -293,10 +309,15 @@ function App() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography className={classes.heading}>Files to Download</Typography>
+                  <Typography className={classes.heading}>
+                    Files to Download
+                  </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.panelDetails}>
-                  <AllFiles courses={courses} filesToDownload={filesToDownload} />
+                  <AllFiles
+                    courses={courses}
+                    filesToDownload={filesToDownload}
+                  />
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             </div>
@@ -315,14 +336,16 @@ function App() {
           <React.Fragment>
             <div className={classes.container}>
               <Typography variant="body2" color="textSecondary">
-                Go to you Chrome Settings and scroll down to the 'Advanced' button. Click this and
-                ensure that, under the 'Downloads' section, the "Ask where to save each file before
-                downloading" option is turned <strong>off</strong>.
+                Go to you Chrome Settings and scroll down to the 'Advanced'
+                button. Click this and ensure that, under the 'Downloads'
+                section, the "Ask where to save each file before downloading"
+                option is turned <strong>off</strong>.
                 <br />
                 <br />
-                Then, click the following button to ensure that your files will be downloaded to the
-                correct folder. If this is not correct, go into the 'Downloads' section of the
-                settings again and set your preferred download location.
+                Then, click the following button to ensure that your files will
+                be downloaded to the correct folder. If this is not correct, go
+                into the 'Downloads' section of the settings again and set your
+                preferred download location.
               </Typography>
             </div>
             <Container className={classes.buttonContainer}>
@@ -343,10 +366,10 @@ function App() {
           <React.Fragment>
             <div className={classes.container}>
               <Typography variant="body2" color="textSecondary">
-                Ensure that everything is correct in the previous steps and click the following
-                button to download. All files will be place into folders for their respective
-                course. Example: the file "Physics Test 1.pdf" will be placed under a "PHYS 1301"
-                folder.
+                Ensure that everything is correct in the previous steps and
+                click the following button to download. All files will be place
+                into folders for their respective course. Example: the file
+                "Physics Test 1.pdf" will be placed under a "PHYS 1301" folder.
               </Typography>
             </div>
             <Stats
@@ -370,7 +393,7 @@ function App() {
           </React.Fragment>
         );
       default:
-        return 'Unknown step';
+        return "Unknown step";
     }
   };
 
@@ -378,8 +401,8 @@ function App() {
   // Everything in this useEffect function is executed once upon init
   useEffect(() => {
     // Add toggle listener for the entire side panel
-    addMessageListener('toggle', () => {
-      storageGet(['open'], (result) => {
+    addMessageListener("toggle", () => {
+      storageGet(["open"], (result) => {
         setExpanded(!result.open);
         storageSet({ open: !result.open });
       });
@@ -389,11 +412,11 @@ function App() {
     retrieveCourseList(retrieveCourseFiles);
 
     // Retrieve initial values from storage
-    storageGet(['excludedExtensions', 'excludedCourses', 'open'], (result) => {
+    storageGet(["excludedExtensions", "excludedCourses", "open"], (result) => {
       const { excludedExtensions, excludedCourses, open } = result;
       excludedExtensions && setExcludedExtensions(excludedExtensions);
       excludedCourses && setExcludedCourses(excludedCourses);
-      if (typeof open === 'undefined') {
+      if (typeof open === "undefined") {
         setExpanded(true);
         storageSet({ open: true });
       } else {
@@ -410,7 +433,7 @@ function App() {
   return (
     <ThemeProvider theme={customTheme}>
       <Slide direction="left" in={expanded}>
-        <div className={classes.root}>
+        <div className={`${classes.root} side-panel`}>
           <TopBar onClose={onClose} />
 
           <div className={classes.main}>
@@ -425,10 +448,16 @@ function App() {
             </Stepper>
 
             <div>
-              <div className={classes.stepperConent}>{getStepContent(activeStep)}</div>
+              <div className={classes.stepperConent}>
+                {getStepContent(activeStep)}
+              </div>
 
               <div className={classes.stepperButtons}>
-                <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+                <Button
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  className={classes.button}
+                >
                   Back
                 </Button>
 
